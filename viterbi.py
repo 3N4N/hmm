@@ -32,7 +32,22 @@ def load_param(fn_param):
     return n_states, P, mu, sd
 
 
-load_param("data/input/parameters.txt")
+def get_stationary_distribution(P, n):
+    y = P
+    for _ in range(n):
+        y = np.matmul(y, P)
+    return y
+
+
+
+
+
+
 y, T = load_data("data/input/data.txt")
 N, P, mu, sd = load_param("data/input/parameters.txt")
 print(T, N, P, mu, sd, sep="\n", end="\n\n")
+
+Pi = get_stationary_distribution(P, 50)
+print(Pi)
+Pi = Pi[0]
+print(Pi)
