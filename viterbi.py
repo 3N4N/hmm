@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.stats import norm
 
 def load_data(fn_data):
     fdata = open(fn_data)
@@ -10,7 +11,7 @@ def load_data(fn_data):
         else:
             y = np.append(y, data)
     fdata.close()
-    return y, y.shape[0]
+    return y
 
 def load_param(fn_param):
     fparam = open(fn_param)
@@ -39,15 +40,25 @@ def get_stationary_distribution(P, n):
     return y
 
 
+def viterbi(y, P, E, Pi):
+    T = len(y)
 
 
 
 
-y, T = load_data("data/input/data.txt")
+y = load_data("data/input/data.txt")
 N, P, mu, sd = load_param("data/input/parameters.txt")
-print(T, N, P, mu, sd, sep="\n", end="\n\n")
+print(N, P, mu, sd, sep="\n", end="\n\n")
 
 Pi = get_stationary_distribution(P, 50)
 print(Pi)
 Pi = Pi[0]
 print(Pi)
+
+E = None
+for i in range(N):
+    if E is None:
+        E = [np.array(norm(mu[i],sd[i]).pdf(y))]
+    else:
+        E = np.concatenate((E, [np.array(norm(mu[i],sd[i]).pdf(y))]))
+print(E.shape)
